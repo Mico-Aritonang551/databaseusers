@@ -1,0 +1,95 @@
+CREATE TABLE Users (
+	user_id INT Primary Key,
+	email VARCHAR(50),
+	user_name VARCHAR(50),
+	password VARCHAR(12),
+	address VARCHAR(200),
+	role VARCHAR(50),
+	status VARCHAR(50),
+	created_at TIMESTAMP,
+	Updated_at DATETIME,
+)
+
+CREATE TABLE Categories (
+	category_id INT PRIMARY KEY,
+	user_id INT,
+	code VARCHAR(50),
+	category_name VARCHAR(50),
+	slug VARCHAR(50),
+	description TEXT,
+	status VARCHAR(50),
+	photo VARCHAR(50)
+
+	CONSTRAINT user_id FOREIGN KEY (user_id)
+	REFERENCES Users(user_id)
+)
+
+CREATE TABLE Products (
+	product_id INT PRIMARY KEY,
+	category_id INT,
+	user_id INT,
+	code_products VARCHAR(50),
+	product_name VARCHAR(50),
+	slug VARCHAR(50),
+	description TEXT,
+	photo VARCHAR(50),
+	qty NUMERIC,
+	unit VARCHAR(50),
+	price NUMERIC,
+	status VARCHAR(50)
+
+	CONSTRAINT FK_user_id FOREIGN KEY (user_id)
+	REFERENCES Users(user_id),
+
+	CONSTRAINT FK_category_id FOREIGN KEY (category_id)
+	REFERENCES Categories(category_id)
+)
+
+
+INSERT INTO Users (user_id,email,user_name,password,address,role,status,created_at,Updated_at)
+VALUES
+  (1, 'john@example.com', 'John Doe', '123456', '123 Main Street, City', 'User', 'Active',  DEFAULT, DEFAULT),
+  (2, 'mary@example.com', 'Mary Smith', 'abcdef', '456 Elm Street, City', 'User', 'Active',  DEFAULT, DEFAULT),
+  (3, 'peter@example.com', 'Peter Johnson', 'qwerty', '789 Oak Street, City', 'Admin', 'Active',  DEFAULT, DEFAULT),
+  (4, 'sarah@example.com', 'Sarah Davis', 'password123', '321 Maple Street, City', 'User', 'Inactive',  DEFAULT, DEFAULT),
+  (5, 'david@example.com', 'David Wilson', 'pass123', '654 Pine Street, City', 'User', 'Active',  DEFAULT, DEFAULT),
+  (6, 'jane@example.com', 'Jane Johnson', 'password', '987 Cedar Street, City', 'User', 'Active',  DEFAULT, DEFAULT),
+  (7, 'alex@example.com', 'Alex Brown', 'test123', '456 Oak Avenue, City', 'Admin', 'Active',  DEFAULT, DEFAULT),
+  (8, 'linda@example.com', 'Linda Thompson', 'qwerty123', '123 Elm Avenue, City', 'User', 'Active',  DEFAULT, DEFAULT),
+  (9, 'mike@example.com', 'Mike Johnson', 'abc123', '789 Pine Avenue, City', 'User', 'Inactive',  DEFAULT, DEFAULT),
+  (10, 'julia@example.com', 'Julia Anderson', 'password456', '321 Cedar Avenue, City', 'Admin', 'Active',  DEFAULT, DEFAULT)
+
+INSERT INTO Categories (category_id,user_id,code,category_name,slug,description,status,photo)
+VALUES 
+  (01, 1, 'C001', 'Category A', 'category-a', 'Description of Category A', 'Active', 'photo1.jpg'),
+  (02, 1, 'C002', 'Category B', 'category-b', 'Description of Category B', 'Active', 'photo2.jpg'),
+  (03, 2, 'C003', 'Category C', 'category-c', 'Description of Category C', 'Active', 'photo3.jpg'),
+  (04, 2, 'C004', 'Category D', 'category-d', 'Description of Category D', 'Active', 'photo4.jpg'),
+  (05, 3, 'C005', 'Category E', 'category-e', 'Description of Category E', 'Active', 'photo5.jpg'),
+  (06, 3, 'C006', 'Category F', 'category-f', 'Description of Category F', 'Active', 'photo6.jpg'),
+  (07, 4, 'C007', 'Category G', 'category-g', 'Description of Category G', 'Active', 'photo7.jpg'),
+  (08, 4, 'C008', 'Category H', 'category-h', 'Description of Category H', 'Active', 'photo8.jpg'),
+  (09, 5, 'C009', 'Category I', 'category-i', 'Description of Category I', 'Active', 'photo9.jpg'),
+  (10, 5, 'C010', 'Category J', 'category-j', 'Description of Category J', 'Active', 'photo10.jpg');
+
+INSERT INTO Products (product_id,category_id,user_id,code_products,product_name,slug,description,photo,qty,unit,price,status)
+VALUES
+  (101, 01, 1, 'P001', 'Product A', 'product-a', 'Description of Product A', 'photo1.jpg', 10, 'pcs', 10.99, 'Active'),
+  (102, 02, 1, 'P002', 'Product B', 'product-b', 'Description of Product B', 'photo2.jpg', 5, 'pcs', 15.99, 'Active'),
+  (103, 03, 2, 'P003', 'Product C', 'product-c', 'Description of Product C', 'photo3.jpg', 20, 'pcs', 8.99, 'Active'),
+  (104, 04, 2, 'P004', 'Product D', 'product-d', 'Description of Product D', 'photo4.jpg', 15, 'pcs', 12.99, 'Active'),
+  (105, 05, 3, 'P005', 'Product E', 'product-e', 'Description of Product E', 'photo5.jpg', 8, 'pcs', 9.99, 'Active'),
+  (106, 06, 3, 'P006', 'Product F', 'product-f', 'Description of Product F', 'photo6.jpg', 12, 'pcs', 11.99, 'Active'),
+  (107, 07, 4, 'P007', 'Product G', 'product-g', 'Description of Product G', 'photo7.jpg', 25, 'pcs', 7.99, 'Active'),
+  (108, 08, 4, 'P008', 'Product H', 'product-h', 'Description of Product H', 'photo8.jpg', 18, 'pcs', 14.99, 'Active'),
+  (109, 09, 5, 'P009', 'Product I', 'product-i', 'Description of Product I', 'photo9.jpg', 6, 'pcs', 16.99, 'Active'),
+  (110, 10, 5, 'P010', 'Product J', 'product-j', 'Description of Product J', 'photo10.jpg', 9, 'pcs', 13.99, 'Active');
+
+
+SELECT Users.user_id, Users.email, Users.user_name, Categories.category_name, Categories.code, Products.product_name,Products.code_products FROM Users 
+LEFT JOIN Categories ON Categories.user_id = Users.user_id 
+LEFT JOIN Products ON Products.category_id = Categories.category_id
+
+
+
+ 
